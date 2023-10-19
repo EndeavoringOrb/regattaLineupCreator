@@ -54,12 +54,16 @@
         <div id="buttonContainer">
             <button id="downloadButton">Download</button>
         </div>
+
+        <div id="buttonContainer">
+            <text>=COUNTIF(SPLIT($Z$100, ","), SUBSTITUTE(ADDRESS(ROW(), COLUMN()), "$", ""))</text>
+        </div>
     </div>
     <div id="bottom-half">
-        <div id="left-panel" class="panel" style="height: 575px; overflow-y: auto;">
+        <div id="left-panel" class="panel" style="height: 100vh; overflow-y: auto;">
             <h2>Boats</h2>
         </div>
-        <div id="right-panel" class="panel" style="height: 575px; overflow-y: auto;">
+        <div id="right-panel" class="panel" style="height: 100vh; overflow-y: auto;">
             <h2>Names</h2>
         </div>
     </div>
@@ -337,11 +341,51 @@
     // Get the button element by its ID
     const downloadButton = document.getElementById('downloadButton');
 
+    function subtractTime(originalTime, minutesToSubtract) {
+        // Parse the original time string into hours and minutes
+        const [hours, minutes] = originalTime.split(':').map(Number);
+
+        // Calculate total minutes
+        const totalMinutes = hours * 60 + minutes;
+
+        // Subtract minutes
+        const newTotalMinutes = totalMinutes - minutesToSubtract;
+
+        // Calculate new hours and minutes
+        const newHours = Math.floor(newTotalMinutes / 60);
+        const newMinutes = newTotalMinutes % 60;
+
+        // Format the result with leading zeros if necessary
+        const formattedHours = String(newHours).padStart(2, '0');
+        const formattedMinutes = String(newMinutes).padStart(2, '0');
+
+        // Resulting time string
+        const newTime = `${formattedHours}:${formattedMinutes}`;
+
+        return newTime;
+    }
+
+    function removeLastCharacter(str) {
+        if (str.length > 0) {
+            return str.slice(0, -1);
+        } else {
+            return str;
+        }
+    }
+
+    function numberToLetter(number) {
+        if (number >= 0 && number <= 25) {
+            return String.fromCharCode(65 + number); // 65 is the ASCII code for 'A'
+        } else {
+            return "Invalid input. Number should be between 0 and 25.";
+        }
+    }
+
     function getSheetArray() {
         var boats = document.getElementById("boats-container").querySelectorAll('.draggable-container');
         // Creating a 2D array of size 5x3
-        var numRows = 15 + 16 * Math.ceil(boats.length / 4);
-        var numCols = 16;
+        var numRows = Math.max(15 + 16 * Math.ceil(boats.length / 4), 100);
+        var numCols = 25;
         var twoDArray = [];
 
         // Loop to create rows
@@ -357,6 +401,10 @@
             twoDArray.push(row);
         }
 
+        var greenHighlights = "";
+        var yellowHighlights = "";
+        var orangeHighlights = "";
+
         twoDArray[2][1] = "Itinerary:";
         twoDArray[3][1] = "Start Land Warm Up";
         twoDArray[4][1] = "Meet Up";
@@ -365,9 +413,14 @@
         twoDArray[7][1] = "At Start Line";
         twoDArray[8][1] = "Race Start";
 
-        twoDArray[11][1] = document.getElementById("arrive-time-input").value
-        twoDArray[12][1] = document.getElementById("bus-leave-time-input").value
-        twoDArray[13][1] = document.getElementById("coach-cox-meeting-time-input").value
+        twoDArray[11][1] = document.getElementById("arrive-time-input").value;
+        twoDArray[12][1] = document.getElementById("bus-leave-time-input").value;
+        twoDArray[13][1] = document.getElementById("coach-cox-meeting-time-input").value;
+        twoDArray[11][2] = "Arrive at Boathouse";
+        twoDArray[12][2] = "Buses Leave boathouse- they WILL leave without you";
+        twoDArray[13][2] = "Coach Coxswain meeting";
+
+        twoDArray[15][0] = "Lineups";
 
         twoDArray[3][2] = "Start Time - 80'";
         twoDArray[4][2] = "Start Time - 60'";
@@ -394,14 +447,40 @@
             twoDArray[rowNumber][colNumber] = start_time;
             twoDArray[rowNumber + 1][colNumber] = "Bow " + bow_number;
             twoDArray[rowNumber + 2][colNumber] = shell;
+            greenHighlights += numberToLetter(colNumber) + (rowNumber + 2) + ",";
             twoDArray[rowNumber + 3][colNumber] = oars;
+            yellowHighlights += numberToLetter(colNumber) + (rowNumber + 3) + ",";
             twoDArray[rowNumber + 4][colNumber] = event_type;
+            orangeHighlights += numberToLetter(colNumber) + (rowNumber + 4) + ",";
             var count = 5;
             container.querySelectorAll('.draggable-item').forEach((item) => {
                 twoDArray[rowNumber + count][colNumber] = item.textContent.split(" (")[0];
                 count++;
             });
+
+            twoDArray[rowNumber + 2][colNumber + 1] = "Itinerary";
+            twoDArray[rowNumber + 3][colNumber + 1] = "Start Land Warm Up";
+            twoDArray[rowNumber + 4][colNumber + 1] = "Meet Up";
+            twoDArray[rowNumber + 5][colNumber + 1] = "Hands on";
+            twoDArray[rowNumber + 6][colNumber + 1] = "Launch";
+            twoDArray[rowNumber + 7][colNumber + 1] = "At Start Line";
+            twoDArray[rowNumber + 8][colNumber + 1] = "Race Start";
+
+            twoDArray[rowNumber + 2][colNumber + 2] = subtractTime(start_time, 80);
+            twoDArray[rowNumber + 3][colNumber + 2] = subtractTime(start_time, 60);
+            twoDArray[rowNumber + 4][colNumber + 2] = subtractTime(start_time, 45);
+            twoDArray[rowNumber + 5][colNumber + 2] = subtractTime(start_time, 40);
+            twoDArray[rowNumber + 6][colNumber + 2] = subtractTime(start_time, 10);
+            twoDArray[rowNumber + 7][colNumber + 2] = start_time;
         });
+
+        greenHighlights = removeLastCharacter(greenHighlights);
+        yellowHighlights = removeLastCharacter(yellowHighlights);
+        orangeHighlights = removeLastCharacter(orangeHighlights);
+
+        twoDArray[97][25] = greenHighlights;
+        twoDArray[98][25] = yellowHighlights;
+        twoDArray[99][25] = orangeHighlights;
 
         return twoDArray;
     }
