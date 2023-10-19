@@ -405,22 +405,22 @@
         var yellowHighlights = "";
         var orangeHighlights = "";
 
-        twoDArray[2][1] = "Itinerary:";
-        twoDArray[3][1] = "Start Land Warm Up";
-        twoDArray[4][1] = "Meet Up";
-        twoDArray[5][1] = "Hands on";
-        twoDArray[6][1] = "Launch";
-        twoDArray[7][1] = "At Start Line";
-        twoDArray[8][1] = "Race Start";
+        twoDArray[1][1] = "Itinerary:";
+        twoDArray[2][1] = "Start Land Warm Up";
+        twoDArray[3][1] = "Meet Up";
+        twoDArray[4][1] = "Hands on";
+        twoDArray[5][1] = "Launch";
+        twoDArray[6][1] = "At Start Line";
+        twoDArray[7][1] = "Race Start";
 
-        twoDArray[11][1] = document.getElementById("arrive-time-input").value;
-        twoDArray[12][1] = document.getElementById("bus-leave-time-input").value;
-        twoDArray[13][1] = document.getElementById("coach-cox-meeting-time-input").value;
-        twoDArray[11][2] = "Arrive at Boathouse";
-        twoDArray[12][2] = "Buses Leave boathouse- they WILL leave without you";
-        twoDArray[13][2] = "Coach Coxswain meeting";
+        twoDArray[10][1] = document.getElementById("arrive-time-input").value;
+        twoDArray[11][1] = document.getElementById("bus-leave-time-input").value;
+        twoDArray[12][1] = document.getElementById("coach-cox-meeting-time-input").value;
+        twoDArray[10][2] = "Arrive at Boathouse";
+        twoDArray[11][2] = "Buses Leave boathouse- they WILL leave without you";
+        twoDArray[12][2] = "Coach Coxswain meeting";
 
-        twoDArray[15][0] = "Lineups";
+        twoDArray[15][0] = "Line Ups";
 
         twoDArray[3][2] = "Start Time - 80'";
         twoDArray[4][2] = "Start Time - 60'";
@@ -466,12 +466,12 @@
             twoDArray[rowNumber + 7][colNumber + 1] = "At Start Line";
             twoDArray[rowNumber + 8][colNumber + 1] = "Race Start";
 
-            twoDArray[rowNumber + 2][colNumber + 2] = subtractTime(start_time, 80);
-            twoDArray[rowNumber + 3][colNumber + 2] = subtractTime(start_time, 60);
-            twoDArray[rowNumber + 4][colNumber + 2] = subtractTime(start_time, 45);
-            twoDArray[rowNumber + 5][colNumber + 2] = subtractTime(start_time, 40);
-            twoDArray[rowNumber + 6][colNumber + 2] = subtractTime(start_time, 10);
-            twoDArray[rowNumber + 7][colNumber + 2] = start_time;
+            twoDArray[rowNumber + 3][colNumber + 2] = subtractTime(start_time, 80);
+            twoDArray[rowNumber + 4][colNumber + 2] = subtractTime(start_time, 60);
+            twoDArray[rowNumber + 5][colNumber + 2] = subtractTime(start_time, 45);
+            twoDArray[rowNumber + 6][colNumber + 2] = subtractTime(start_time, 40);
+            twoDArray[rowNumber + 7][colNumber + 2] = subtractTime(start_time, 10);
+            twoDArray[rowNumber + 8][colNumber + 2] = start_time;
         });
 
         greenHighlights = removeLastCharacter(greenHighlights);
